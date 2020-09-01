@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -22,6 +23,8 @@ import javafx.util.Duration;
 import sample.dice.Dice;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +45,7 @@ public class Main extends Application {
 
     private List<Tile> tiles = new ArrayList<>();
 
-    private ImageView playerImage = new ImageView(new Image(new File("src/board_piece.png").toURI().toString()));
+    private ImageView playerImage = new ImageView(new Image(new File("src/red2.png").toURI().toString()));
 
     private int move ( int diceValue){
         int temp = playerPosition + diceValue;
@@ -71,7 +74,7 @@ public class Main extends Application {
         return temp;
 
     }
-    private Parent createContent() {
+    private Parent createContent() throws FileNotFoundException {
         Pane root = new Pane();
         //root.setPrefSize(1000, 700);
 
@@ -126,13 +129,15 @@ public class Main extends Application {
     }
 
     private class Tile extends StackPane {
-        public Tile(String value) {
+        public Tile(String value) throws FileNotFoundException {
             Rectangle border = new Rectangle(80, 80);
-            border.setFill(Color.RED);
+            Image img = new Image(new FileInputStream("C:\\Users\\mluka\\IdeaProjects\\math-boardgame\\src\\116_1.png"));
+
+            border.setFill(Color.LIGHTBLUE);
+            border.setFill(new ImagePattern(img));
+
+
             border.setStroke(Color.BLACK);
-
-
-
             Text text = new Text(value);
             text.setFont(Font.font(24));
 
@@ -144,17 +149,17 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-
+//Texta vizuaja daļa
         VBox vBox = new VBox();
 
         Label label = new Label("Welcome new player!");
         label.setFont(Font.font("Roboto", FontWeight.BOLD, FontPosture.ITALIC, 30));
         label.setAlignment(Pos.CENTER);
-        label.setTextFill(Color.BLUE);
+        label.setTextFill(Color.DARKBLUE);
         label.setPadding(new Insets(100, 50, 50, 50));
 
 
-        Label label1 = new Label("Are you ready? Roll the dice and we will see what  are you made of....");
+        Label label1 = new Label("Are you ready? Roll the dice and we will see what you are made of....");
         label1.setMaxWidth(400);
         label1.setWrapText(true);
         label1.setFont(Font.font("Roboto", 25));

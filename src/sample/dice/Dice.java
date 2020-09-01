@@ -6,6 +6,8 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -21,13 +23,14 @@ public class Dice extends StackPane { // use when stacking different objects on 
         Rectangle rect = new Rectangle(60,60);
 
         rect.setFill(Color.WHITE);
-        rect.setStroke(Color.BLACK);
-        rect.setStrokeWidth(5);
+        rect.setStroke(Color.DARKBLUE);
+        rect.setStrokeWidth(3);
 
         Text text = new Text();
         text.setFill(Color.BLACK);
-        text.setStroke(Color.BLACK);
-        text.setStrokeWidth(1);
+        text.setFont(Font.font("Roboto", 40));
+        text.setStroke(Color.DARKBLUE);
+        text.setStrokeWidth(0);
         text.textProperty().bind(valueProperty.asString());
 
         this.setAlignment(Pos.CENTER);

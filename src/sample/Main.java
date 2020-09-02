@@ -190,7 +190,11 @@ public class Main extends Application {
 
         //šis event atver jaunu logu, kad beidzas animacija
         imageTransition.setOnFinished(event -> {
-            newWindow();
+            try {
+                newWindow();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         });
         imageTransition.play();
 
@@ -201,10 +205,26 @@ public class Main extends Application {
 
     }
 //new window metode
-    private void newWindow() {
+    private void newWindow() throws FileNotFoundException {
         Label secondLabel = new Label("I'm a Label on new Window");
+
         StackPane secondaryLayout = new StackPane();
-        Scene secondScene = new Scene(secondaryLayout, 230, 100);
+        Scene secondScene = new Scene(secondaryLayout, 800, 800);
+
+        VBox vbox = new VBox();
+        vbox.setPadding(new Insets(10));
+        vbox.setSpacing(100);
+
+        Image image = new Image(new FileInputStream("src/100.png"));
+        ImageView imageView = new ImageView(image);
+
+        imageView.setX(50);
+        imageView.setY(25);
+        imageView.maxHeight(300);
+        imageView.maxWidth(300);
+
+        //Setting the preserve ratio of the image view
+        imageView.setPreserveRatio(true);
 
         // New window (Stage)
         Stage newWindow = new Stage();
@@ -221,16 +241,28 @@ public class Main extends Application {
         newWindow.setX(window.getX() + 200);
         newWindow.setY(window.getY() + 100);
 
-        Button secondButton = new Button();
-        secondButton.setText("Close");
-        secondButton.setOnAction(actionEvent -> {
+        Button button100 = new Button("Forwards to the next task");
+        //button100.setOnAction(e -> window.setScene(scene));
+        button100.setAlignment(Pos.BOTTOM_CENTER);
+        button100.setMaxSize(300, 10);
+        button100.setStyle("-fx-background-color: #9e0000 ; " + "-fx-text-fill: #ffffff;" + "-fx-font-size: 1.5em;");
+        button100.setPadding(new Insets(10, 10, 10, 10));
+        button100.setOnAction(actionEvent -> {
                     newWindow.close();
                 }
 
         );
 
-        secondaryLayout.getChildren().addAll(secondButton);
+//        Button secondButton = new Button();
+//        secondButton.setText("Close");
+//        secondButton.setOnAction(actionEvent -> {
+//                    newWindow.close();
+//                }
+//
+//        );
 
+        secondaryLayout.getChildren().addAll(vbox, imageView, button100);
+        vbox.setAlignment(Pos.CENTER);
         newWindow.show();
     }
 

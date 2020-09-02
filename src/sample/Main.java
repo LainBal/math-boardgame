@@ -131,7 +131,7 @@ public class Main extends Application {
     private class Tile extends StackPane {
         public Tile(String value) throws FileNotFoundException {
             Rectangle border = new Rectangle(80, 80);
-            Image img = new Image(new FileInputStream("C:\\Users\\mluka\\IdeaProjects\\math-boardgame\\src\\116_1.png"));
+            Image img = new Image(new FileInputStream("src/116_1.png"));
 
             border.setFill(Color.LIGHTBLUE);
             border.setFill(new ImagePattern(img));

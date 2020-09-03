@@ -67,8 +67,9 @@ public class Main extends Application {
         for (int i = 0; i < NUM_OF_TILE; i++) {
             if (c == 0) {
                 tiles.add(new Tile("START"));
-            } else {
-                tiles.add(new Tile(String.valueOf(c)));
+            } else { if (c==35)
+            { tiles.add(new Tile("FINIŠS"));} else{
+                tiles.add(new Tile(String.valueOf(c)));}
             }
             c++;
         }
@@ -172,6 +173,13 @@ public class Main extends Application {
         int temp = playerPosition + diceValue;
         if (temp >= NUM_OF_TILE) {
             temp = NUM_OF_TILE - 1;
+            if(temp == NUM_OF_TILE - 1){
+
+                try { finalWindow();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         Tile tile = tiles.get(temp);
 
@@ -227,7 +235,7 @@ public class Main extends Application {
 
         // New window (Stage)
         Stage newWindow = new Stage();
-        newWindow.setTitle("Second Stage");
+        newWindow.setTitle("Question!");
         newWindow.setScene(secondScene);
 
         // Specifies the modality for new window.
@@ -252,13 +260,6 @@ public class Main extends Application {
 
         );
 
-//        Button secondButton = new Button();
-//        secondButton.setText("Close");
-//        secondButton.setOnAction(actionEvent -> {
-//                    newWindow.close();
-//                }
-//
-//        );
 
         secondaryLayout.getChildren().addAll(vbox, imageView, button100);
         vbox.getChildren().addAll(imageView, button100);
@@ -267,10 +268,65 @@ public class Main extends Application {
     }
 
     private void endGame() {
+        window.close();
 
         //jauzraksta metode kas notiek pie pedeja laucina(35) ( piem, atbild uz jautajum un izlec logs "thank you for
         //playing vai kaut ka ta
 
+    }
+    private void finalWindow() throws FileNotFoundException {
+
+        StackPane secondaryLayout2 = new StackPane();
+        Scene secondScene2 = new Scene(secondaryLayout2, 600, 600);
+
+        VBox vbox = new VBox();
+        vbox.setPadding(new Insets(10));
+        vbox.setSpacing(30);
+
+        Image image2 = new Image(new FileInputStream(TaskTest.getRandomTask()));
+        ImageView imageView2 = new ImageView(image2);
+
+        imageView2.setX(50);
+        imageView2.setY(25);
+        imageView2.maxHeight(300);
+        imageView2.maxWidth(300);
+
+        //Setting the preserve ratio of the image view
+        imageView2.setPreserveRatio(true);
+
+        // New window (Stage)
+        Stage finalWindow = new Stage();
+        finalWindow.setTitle("Question!");
+        finalWindow.setScene(secondScene2);
+
+        // Specifies the modality for new window.
+        finalWindow.initModality(Modality.WINDOW_MODAL);
+
+        // Specifies the owner Window (parent) for new window
+        finalWindow.initOwner(window);
+
+        // Set position of second window, related to primary window.
+        finalWindow.setX(window.getX() + 200);
+        finalWindow.setY(window.getY() + 100);
+
+        Button button1001 = new Button("END GAME");
+        //button100.setOnAction(e -> window.setScene(scene));
+        button1001.setAlignment(Pos.CENTER);
+        button1001.setMaxSize(300, 10);
+        button1001.setStyle("-fx-background-color: #9e0000 ; " + "-fx-text-fill: #ffffff;" + "-fx-font-size: 1.5em;");
+        button1001.setPadding(new Insets(10, 10, 10, 60));
+        button1001.setOnAction(actionEvent -> {
+                    finalWindow.close();
+                    endGame();
+                }
+
+        );
+
+
+        secondaryLayout2.getChildren().addAll(vbox, imageView2, button1001);
+        vbox.getChildren().addAll(imageView2, button1001);
+        vbox.setAlignment(Pos.CENTER);
+        finalWindow.show();
     }
 }
 

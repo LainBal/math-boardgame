@@ -63,6 +63,9 @@ public class Main extends Application {
         playerImage.setFitHeight(60);
         playerImage.setFitWidth(60);
 
+        // no TaskTest klases izsaukta metode, kas samaisa uzdevumus, lai tie neatkartotos katru reizi
+        TaskTest.shuffle();
+
         int c = 0;
         for (int i = 0; i < NUM_OF_TILE; i++) {
             if (c == 0) {
@@ -205,9 +208,6 @@ public class Main extends Application {
             }
         });
         imageTransition.play();
-
-        //image.setTranslateX(tile.getTranslateX()+10);
-        //image.setTranslateY(tile.getTranslateY()+10);
 
         return temp;
 

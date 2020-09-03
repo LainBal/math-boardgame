@@ -2,10 +2,6 @@ package sample;
 
 import javafx.animation.PathTransition;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -24,7 +20,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.util.Duration;
 import sample.dice.Dice;
 import sample.tasks.TaskTest;
@@ -38,10 +33,6 @@ import java.util.List;
 
 public class Main extends Application {
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     Stage window;
 
     private static final int NUM_OF_TILE = 36;
@@ -53,12 +44,11 @@ public class Main extends Application {
 
     private List<Tile> tiles = new ArrayList<>();
 
-    private ImageView playerImage = new ImageView(new Image(new File("src/red2.png").toURI().toString()));
+    private ImageView playerImage = new ImageView(new Image(new File("src/images/red2.png").toURI().toString()));
 
 
     private Parent createContent() throws FileNotFoundException {
         Pane root = new Pane();
-        //root.setPrefSize(1000, 700);
 
         playerImage.setTranslateX(10);
         playerImage.setTranslateY(10);
@@ -66,9 +56,10 @@ public class Main extends Application {
         playerImage.setFitHeight(60);
         playerImage.setFitWidth(60);
 
-        // no TaskTest klases izsaukta metode, kas samaisa uzdevumus, lai tie neatkartotos katru reizi
+// no TaskTest klases izsaukta metode, kas samaisa uzdevumus, lai tie neatkartotos katru reizi
         TaskTest.shuffle();
 
+// for loops, kas izveido laukuma numeraciju un if statements ,kas izveido START/FINISH laukus
         int c = 0;
         for (int i = 0; i < NUM_OF_TILE; i++) {
             if (c == 0) {
@@ -79,9 +70,7 @@ public class Main extends Application {
             }
             c++;
         }
-        for (int i = 0; i < tiles.size(); i++) {
 
-        }
         for (int i = 0; i < tiles.size(); i++) {
             Tile tile = tiles.get(i);
             tile.setTranslateX(80 * (i % NUM_PER_ROW));
@@ -89,7 +78,7 @@ public class Main extends Application {
             root.getChildren().addAll(tile);
         }
 
-
+// rolling dice
         Dice dice1 = new Dice();
 // position of dice
         dice1.setTranslateX(150);
@@ -103,9 +92,6 @@ public class Main extends Application {
             diceValue = (int) (Math.random() * (Dice.MAX_VALUE - Dice.MIN_VALUE + 1)) + Dice.MIN_VALUE;
             dice1.rollExact(diceValue);
             playerPosition = move(diceValue);
-            if (playerPosition == NUM_OF_TILE - 1) {
-//                endGame;
-            }
         });
 
         root.getChildren().addAll(dice1, btn, playerImage);
@@ -116,7 +102,7 @@ public class Main extends Application {
     private class Tile extends StackPane {
         public Tile(String value) throws FileNotFoundException {
             Rectangle border = new Rectangle(80, 80);
-            Image img = new Image(new FileInputStream("src/116_1.png"));
+            Image img = new Image(new FileInputStream("src/images/116_1.png"));
 
             border.setFill(Color.LIGHTBLUE);
             border.setFill(new ImagePattern(img));
@@ -134,7 +120,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
 
-//Texta vizuaja daļa
+//Texta vizuala daļa
         VBox vBox = new VBox();
 
         Label label = new Label("Welcome new player!");
@@ -157,7 +143,7 @@ public class Main extends Application {
         label2.setFont(Font.font("Roboto", FontWeight.BOLD, 20));
         label2.setPadding(new Insets(10, 50, 50, 670));
 
-        Label label3 = new Label("100% ");
+        Label label3 = new Label("1 000 000% ");
         label3.setFont(Font.font("Roboto", FontWeight.BOLD, 20));
         label3.setPadding(new Insets(10, 10, 50, 10));
 
@@ -168,14 +154,17 @@ public class Main extends Application {
         borderPane.setBottom(hBox);
         borderPane.setLeft(createContent());
 
+// main loga paramteri
         window = primaryStage;
         Scene scene = new Scene(borderPane, 1000, 700);
         window.setScene(scene);
-        window.setTitle("Game");
+        window.setTitle("The most complicated game in the world!");
         window.show();
     }
 
     private int move(int diceValue) {
+
+// iesanas kaulina animacija + kustibas trajektorija
         int temp = playerPosition + diceValue;
         if (temp >= NUM_OF_TILE) {
             temp = NUM_OF_TILE - 1;
@@ -196,7 +185,7 @@ public class Main extends Application {
         imageTransition.setPath(imagePath);
         imageTransition.setDuration(Duration.seconds(1));
 
-        //šis event atver jaunu logu, kad beidzas animacija
+//šis event atver jaunu logu, kad beidzas animacija
         int finalTemp = temp;
         imageTransition.setOnFinished(event -> {
             if (finalTemp != NUM_OF_TILE - 1){
@@ -205,7 +194,7 @@ public class Main extends Application {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-            }else if(finalTemp == NUM_OF_TILE - 1){
+            }else {
                 try { finalWindow();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -213,10 +202,9 @@ public class Main extends Application {
             }
         });
         imageTransition.play();
-
         return temp;
-
     }
+
 //new window metode
     private void newWindow() throws FileNotFoundException {
 
@@ -235,34 +223,30 @@ public class Main extends Application {
         imageView.maxHeight(300);
         imageView.maxWidth(300);
 
-        //Setting the preserve ratio of the image view
+//Setting the preserve ratio of the image view
         imageView.setPreserveRatio(true);
 
-        // New window (Stage)
+// New window (Stage)
         Stage newWindow = new Stage();
         newWindow.setTitle("Question!");
         newWindow.setScene(secondScene);
 
-        // Specifies the modality for new window.
+// Specifies the modality for new window.
         newWindow.initModality(Modality.WINDOW_MODAL);
 
-        // Specifies the owner Window (parent) for new window
+// Specifies the owner Window (parent) for new window
         newWindow.initOwner(window);
 
-        // Set position of second window, related to primary window.
+// Set position of second window, related to primary window.
         newWindow.setX(window.getX() + 200);
         newWindow.setY(window.getY() + 100);
 
-        Button button100 = new Button("Forwards to the next task");
-        //button100.setOnAction(e -> window.setScene(scene));
+        Button button100 = new Button("NEXT TASK");
         button100.setAlignment(Pos.CENTER);
-        button100.setMaxSize(300, 10);
+        button100.setMaxSize(200, 10);
         button100.setStyle("-fx-background-color: #9e0000 ; " + "-fx-text-fill: #ffffff;" + "-fx-font-size: 1.5em;");
-        button100.setPadding(new Insets(10, 10, 10, 60));
-        button100.setOnAction(actionEvent -> {
-                    newWindow.close();
-                }
-        );
+        button100.setPadding(new Insets(10, 10, 10, 10));
+        button100.setOnAction(actionEvent -> newWindow.close());
 
         secondaryLayout.getChildren().addAll(vbox, imageView, button100);
         vbox.getChildren().addAll(imageView, button100);
@@ -270,23 +254,16 @@ public class Main extends Application {
         newWindow.show();
     }
 
-    private void endGame() {
-        window.close();
-
-        //jauzraksta metode kas notiek pie pedeja laucina(35) ( piem, atbild uz jautajum un izlec logs "thank you for
-        //playing vai kaut ka ta
-
-    }
     private void finalWindow() throws FileNotFoundException {
 
         StackPane secondaryLayout2 = new StackPane();
-        Scene secondScene2 = new Scene(secondaryLayout2, 600, 600);
+        Scene secondScene2 = new Scene(secondaryLayout2, 400, 400);
 
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(30);
 
-        Image image2 = new Image(new FileInputStream(TaskTest.getRandomTask()));
+        Image image2 = new Image(new FileInputStream("src/images/balloons.gif"));
         ImageView imageView2 = new ImageView(image2);
 
         imageView2.setX(50);
@@ -294,43 +271,36 @@ public class Main extends Application {
         imageView2.maxHeight(300);
         imageView2.maxWidth(300);
 
-        //Setting the preserve ratio of the image view
+//Setting the preserve ratio of the image view
         imageView2.setPreserveRatio(true);
 
-        // New window (Stage)
+// New window (Stage)
         Stage finalWindow = new Stage();
-        finalWindow.setTitle("Question!");
+        finalWindow.setTitle("Congratulations!");
         finalWindow.setScene(secondScene2);
 
-        // Specifies the modality for new window.
+// Specifies the modality for new window.
         finalWindow.initModality(Modality.WINDOW_MODAL);
 
-        // Specifies the owner Window (parent) for new window
+// Specifies the owner Window (parent) for new window
         finalWindow.initOwner(window);
 
-        // Set position of second window, related to primary window.
+// Set position of second window, related to primary window.
         finalWindow.setX(window.getX() + 200);
         finalWindow.setY(window.getY() + 100);
 
         Button button1001 = new Button("END GAME");
-        //button100.setOnAction(e -> window.setScene(scene));
-        button1001.setAlignment(Pos.CENTER);
-        button1001.setMaxSize(300, 10);
+        button1001.setAlignment(Pos.BASELINE_CENTER);
+        button1001.setMaxSize(200, 10);
         button1001.setStyle("-fx-background-color: #9e0000 ; " + "-fx-text-fill: #ffffff;" + "-fx-font-size: 1.5em;");
-        button1001.setPadding(new Insets(10, 10, 10, 60));
-        button1001.setOnAction(actionEvent -> {
-                    finalWindow.close();
-                    endGame();
-                }
-
-        );
+        button1001.setPadding(new Insets(10, 10, 10, 10));
+        button1001.setOnAction(actionEvent -> window.close());
 
         Button button10011 = new Button("PLAY AGAIN!");
-        //button100.setOnAction(e -> window.setScene(scene));
         button10011.setAlignment(Pos.CENTER);
-        button10011.setMaxSize(300, 10);
+        button10011.setMaxSize(200, 10);
         button10011.setStyle("-fx-background-color: #9e0000 ; " + "-fx-text-fill: #ffffff;" + "-fx-font-size: 1.5em;");
-        button10011.setPadding(new Insets(10, 10, 10, 60));
+        button10011.setPadding(new Insets(10, 10, 10, 10));
         button10011.setOnAction(actionEvent -> {
                     finalWindow.close();
                     playerPosition = 0;
@@ -340,15 +310,16 @@ public class Main extends Application {
 
                     playerImage.setFitHeight(60);
                     playerImage.setFitWidth(60);
-
                 }
-
         );
-
         secondaryLayout2.getChildren().addAll(vbox, imageView2, button1001);
         vbox.getChildren().addAll(imageView2, button1001,button10011);
         vbox.setAlignment(Pos.CENTER);
         finalWindow.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
 

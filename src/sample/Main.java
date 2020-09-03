@@ -2,6 +2,7 @@ package sample;
 
 import javafx.animation.PathTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -23,6 +24,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
 import sample.dice.Dice;
 import sample.tasks.TaskTest;
@@ -331,7 +333,14 @@ public class Main extends Application {
         button10011.setPadding(new Insets(10, 10, 10, 60));
         button10011.setOnAction(actionEvent -> {
                     finalWindow.close();
-                    // NEZINU KĀ UZTAISĪT RESTARTU :(
+                    playerPosition = 0;
+                    diceValue = 0;
+                    playerImage.setTranslateX(10);
+                    playerImage.setTranslateY(10);
+
+                    playerImage.setFitHeight(60);
+                    playerImage.setFitWidth(60);
+
                 }
 
         );

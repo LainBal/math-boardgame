@@ -25,6 +25,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import sample.dice.Dice;
+import sample.tasks.TaskTest;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -112,7 +113,6 @@ public class Main extends Application {
 
             border.setFill(Color.LIGHTBLUE);
             border.setFill(new ImagePattern(img));
-
 
             border.setStroke(Color.BLACK);
             Text text = new Text(value);
@@ -206,16 +206,15 @@ public class Main extends Application {
     }
 //new window metode
     private void newWindow() throws FileNotFoundException {
-        Label secondLabel = new Label("I'm a Label on new Window");
 
         StackPane secondaryLayout = new StackPane();
-        Scene secondScene = new Scene(secondaryLayout, 800, 800);
+        Scene secondScene = new Scene(secondaryLayout, 600, 600);
 
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
-        vbox.setSpacing(100);
+        vbox.setSpacing(30);
 
-        Image image = new Image(new FileInputStream("src/100.png"));
+        Image image = new Image(new FileInputStream(TaskTest.getRandomTask()));
         ImageView imageView = new ImageView(image);
 
         imageView.setX(50);
@@ -243,10 +242,10 @@ public class Main extends Application {
 
         Button button100 = new Button("Forwards to the next task");
         //button100.setOnAction(e -> window.setScene(scene));
-        button100.setAlignment(Pos.BOTTOM_CENTER);
+        button100.setAlignment(Pos.CENTER);
         button100.setMaxSize(300, 10);
         button100.setStyle("-fx-background-color: #9e0000 ; " + "-fx-text-fill: #ffffff;" + "-fx-font-size: 1.5em;");
-        button100.setPadding(new Insets(10, 10, 10, 10));
+        button100.setPadding(new Insets(10, 10, 10, 60));
         button100.setOnAction(actionEvent -> {
                     newWindow.close();
                 }
@@ -262,6 +261,7 @@ public class Main extends Application {
 //        );
 
         secondaryLayout.getChildren().addAll(vbox, imageView, button100);
+        vbox.getChildren().addAll(imageView, button100);
         vbox.setAlignment(Pos.CENTER);
         newWindow.show();
     }

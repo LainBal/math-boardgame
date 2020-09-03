@@ -41,6 +41,7 @@ public class Main extends Application {
     }
 
     Stage window;
+
     private static final int NUM_OF_TILE = 36;
     private static final int NUM_PER_ROW = 6;
 
@@ -176,14 +177,8 @@ public class Main extends Application {
         int temp = playerPosition + diceValue;
         if (temp >= NUM_OF_TILE) {
             temp = NUM_OF_TILE - 1;
-            if(temp == NUM_OF_TILE - 1){
-
-                try { finalWindow();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
         }
+
         Tile tile = tiles.get(temp);
 
         Path imagePath = new Path();
@@ -200,11 +195,19 @@ public class Main extends Application {
         imageTransition.setDuration(Duration.seconds(1));
 
         //šis event atver jaunu logu, kad beidzas animacija
+        int finalTemp = temp;
         imageTransition.setOnFinished(event -> {
-            try {
-                newWindow();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            if (finalTemp != NUM_OF_TILE - 1){
+                try {
+                    newWindow();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }else if(finalTemp == NUM_OF_TILE - 1){
+                try { finalWindow();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
         imageTransition.play();
@@ -257,9 +260,7 @@ public class Main extends Application {
         button100.setOnAction(actionEvent -> {
                     newWindow.close();
                 }
-
         );
-
 
         secondaryLayout.getChildren().addAll(vbox, imageView, button100);
         vbox.getChildren().addAll(imageView, button100);

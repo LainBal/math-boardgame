@@ -25,6 +25,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import sample.dice.Dice;
+import sample.tasks.TaskTest;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,12 +63,16 @@ public class Main extends Application {
         playerImage.setFitHeight(60);
         playerImage.setFitWidth(60);
 
+        // no TaskTest klases izsaukta metode, kas samaisa uzdevumus, lai tie neatkartotos katru reizi
+        TaskTest.shuffle();
+
         int c = 0;
         for (int i = 0; i < NUM_OF_TILE; i++) {
             if (c == 0) {
                 tiles.add(new Tile("START"));
-            } else {
-                tiles.add(new Tile(String.valueOf(c)));
+            } else { if (c==35)
+            { tiles.add(new Tile("FINISH"));} else{
+                tiles.add(new Tile(String.valueOf(c)));}
             }
             c++;
         }
@@ -112,7 +117,6 @@ public class Main extends Application {
 
             border.setFill(Color.LIGHTBLUE);
             border.setFill(new ImagePattern(img));
-
 
             border.setStroke(Color.BLACK);
             Text text = new Text(value);
@@ -172,6 +176,13 @@ public class Main extends Application {
         int temp = playerPosition + diceValue;
         if (temp >= NUM_OF_TILE) {
             temp = NUM_OF_TILE - 1;
+            if(temp == NUM_OF_TILE - 1){
+
+                try { finalWindow();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         Tile tile = tiles.get(temp);
 
@@ -198,24 +209,20 @@ public class Main extends Application {
         });
         imageTransition.play();
 
-        //image.setTranslateX(tile.getTranslateX()+10);
-        //image.setTranslateY(tile.getTranslateY()+10);
-
         return temp;
 
     }
 //new window metode
     private void newWindow() throws FileNotFoundException {
-        Label secondLabel = new Label("I'm a Label on new Window");
 
         StackPane secondaryLayout = new StackPane();
-        Scene secondScene = new Scene(secondaryLayout, 800, 800);
+        Scene secondScene = new Scene(secondaryLayout, 600, 600);
 
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
-        vbox.setSpacing(100);
+        vbox.setSpacing(30);
 
-        Image image = new Image(new FileInputStream("src/100.png"));
+        Image image = new Image(new FileInputStream(TaskTest.getRandomTask()));
         ImageView imageView = new ImageView(image);
 
         imageView.setX(50);
@@ -228,7 +235,7 @@ public class Main extends Application {
 
         // New window (Stage)
         Stage newWindow = new Stage();
-        newWindow.setTitle("Second Stage");
+        newWindow.setTitle("Question!");
         newWindow.setScene(secondScene);
 
         // Specifies the modality for new window.
@@ -243,34 +250,95 @@ public class Main extends Application {
 
         Button button100 = new Button("Forwards to the next task");
         //button100.setOnAction(e -> window.setScene(scene));
-        button100.setAlignment(Pos.BOTTOM_CENTER);
+        button100.setAlignment(Pos.CENTER);
         button100.setMaxSize(300, 10);
         button100.setStyle("-fx-background-color: #9e0000 ; " + "-fx-text-fill: #ffffff;" + "-fx-font-size: 1.5em;");
-        button100.setPadding(new Insets(10, 10, 10, 10));
+        button100.setPadding(new Insets(10, 10, 10, 60));
         button100.setOnAction(actionEvent -> {
                     newWindow.close();
                 }
 
         );
 
-//        Button secondButton = new Button();
-//        secondButton.setText("Close");
-//        secondButton.setOnAction(actionEvent -> {
-//                    newWindow.close();
-//                }
-//
-//        );
 
         secondaryLayout.getChildren().addAll(vbox, imageView, button100);
+        vbox.getChildren().addAll(imageView, button100);
         vbox.setAlignment(Pos.CENTER);
         newWindow.show();
     }
 
     private void endGame() {
+        window.close();
 
         //jauzraksta metode kas notiek pie pedeja laucina(35) ( piem, atbild uz jautajum un izlec logs "thank you for
         //playing vai kaut ka ta
 
+    }
+    private void finalWindow() throws FileNotFoundException {
+
+        StackPane secondaryLayout2 = new StackPane();
+        Scene secondScene2 = new Scene(secondaryLayout2, 600, 600);
+
+        VBox vbox = new VBox();
+        vbox.setPadding(new Insets(10));
+        vbox.setSpacing(30);
+
+        Image image2 = new Image(new FileInputStream(TaskTest.getRandomTask()));
+        ImageView imageView2 = new ImageView(image2);
+
+        imageView2.setX(50);
+        imageView2.setY(25);
+        imageView2.maxHeight(300);
+        imageView2.maxWidth(300);
+
+        //Setting the preserve ratio of the image view
+        imageView2.setPreserveRatio(true);
+
+        // New window (Stage)
+        Stage finalWindow = new Stage();
+        finalWindow.setTitle("Question!");
+        finalWindow.setScene(secondScene2);
+
+        // Specifies the modality for new window.
+        finalWindow.initModality(Modality.WINDOW_MODAL);
+
+        // Specifies the owner Window (parent) for new window
+        finalWindow.initOwner(window);
+
+        // Set position of second window, related to primary window.
+        finalWindow.setX(window.getX() + 200);
+        finalWindow.setY(window.getY() + 100);
+
+        Button button1001 = new Button("END GAME");
+        //button100.setOnAction(e -> window.setScene(scene));
+        button1001.setAlignment(Pos.CENTER);
+        button1001.setMaxSize(300, 10);
+        button1001.setStyle("-fx-background-color: #9e0000 ; " + "-fx-text-fill: #ffffff;" + "-fx-font-size: 1.5em;");
+        button1001.setPadding(new Insets(10, 10, 10, 60));
+        button1001.setOnAction(actionEvent -> {
+                    finalWindow.close();
+                    endGame();
+                }
+
+        );
+
+        Button button10011 = new Button("PLAY AGAIN!");
+        //button100.setOnAction(e -> window.setScene(scene));
+        button10011.setAlignment(Pos.CENTER);
+        button10011.setMaxSize(300, 10);
+        button10011.setStyle("-fx-background-color: #9e0000 ; " + "-fx-text-fill: #ffffff;" + "-fx-font-size: 1.5em;");
+        button10011.setPadding(new Insets(10, 10, 10, 60));
+        button10011.setOnAction(actionEvent -> {
+                    finalWindow.close();
+                    // NEZINU KĀ UZTAISĪT RESTARTU :(
+                }
+
+        );
+
+        secondaryLayout2.getChildren().addAll(vbox, imageView2, button1001);
+        vbox.getChildren().addAll(imageView2, button1001,button10011);
+        vbox.setAlignment(Pos.CENTER);
+        finalWindow.show();
     }
 }
 
